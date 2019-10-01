@@ -10,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using RabbitMQ.Client;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 using Faction.Common;
 using Faction.Common.Models;
@@ -23,6 +21,7 @@ using Faction.Common.Backend.EventBus;
 
 using Faction.Build.Dotnet.Objects;
 using Faction.Build.Dotnet.Handlers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Faction.Build.Dotnet
 {  

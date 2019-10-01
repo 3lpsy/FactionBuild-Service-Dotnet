@@ -2,18 +2,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net;
-using Newtonsoft.Json;
 
-using Faction.Common;
+
 using Faction.Common.Backend.Database;
 using Faction.Common.Backend.EventBus.Abstractions;
 using Faction.Common.Models;
 using Faction.Common.Messages;
-
-using Faction.Build.Dotnet;
 
 namespace Faction.Build.Dotnet.Handlers
 {

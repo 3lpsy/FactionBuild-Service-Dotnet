@@ -2,18 +2,16 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Net;
-using Newtonsoft.Json;
-
+using System.Text.Json;
 using Faction.Common;
 using Faction.Common.Backend.Database;
 using Faction.Common.Backend.EventBus.Abstractions;
 using Faction.Common.Messages;
 using Faction.Common.Models;
 
-using Faction.Build.Dotnet;
 using Faction.Build.Dotnet.Objects;
 
 namespace Faction.Build.Dotnet.Handlers
@@ -118,7 +116,7 @@ namespace Faction.Build.Dotnet.Handlers
       BuildConfig buildConfig = CreateBuildConfig(payload);
 
       string buildConfigFile = Path.GetTempFileName();
-      File.AppendAllText(buildConfigFile, JsonConvert.SerializeObject(buildConfig, Formatting.Indented));
+      File.AppendAllText(buildConfigFile, JsonSerializer.Serialize(buildConfig));
 
       // Build transport first
       File.Delete(Path.Join(workingDir, payload.AgentTransportType.BuildLocation));
@@ -144,7 +142,7 @@ namespace Faction.Build.Dotnet.Handlers
       // Build the agent
       if (!String.IsNullOrEmpty(transportB64)) {
         buildConfig.TransportModule = transportB64;
-        File.AppendAllText(buildConfigFile, JsonConvert.SerializeObject(buildConfig, Formatting.Indented));
+        File.AppendAllText(buildConfigFile, JsonSerializer.Serialize(buildConfig));
 
         File.Delete(Path.Join(workingDir, payload.AgentType.BuildLocation));
         string buildCommand = $"{payload.AgentType.BuildCommand} {buildConfigFile}";

@@ -1,25 +1,11 @@
 using System;
 using System.IO;
-using System.Text;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using RabbitMQ.Client;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 using Faction.Common.Models;
 using Faction.Common.Backend.Database;
-using Faction.Common.Backend.EventBus.Abstractions;
-using Faction.Common.Backend.EventBus.RabbitMQ;
-using Faction.Common.Backend.EventBus;
 
 using Faction.Build.Dotnet.Objects;
-using Faction.Build.Dotnet.Handlers;
 
 namespace Faction.Build.Dotnet
 {
@@ -53,12 +39,20 @@ namespace Faction.Build.Dotnet
       {
         bool import;
         string contents = File.ReadAllText(file);
-        JsonSerializerSettings settings = new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Include,
-                        MissingMemberHandling = MissingMemberHandling.Ignore
-                    };
-        ModuleConfig moduleConfig = JsonConvert.DeserializeObject<ModuleConfig>(contents);
+        
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+          IgnoreNullValues = true,
+          WriteIndented = true,
+          
+          
+        };
+//        JsonSerializerSettings settings = new JsonSerializerSettings
+//                    {
+//                        NullValueHandling = NullValueHandling.Include,
+//                        MissingMemberHandling = MissingMemberHandling.Ignore
+//                    };
+        ModuleConfig moduleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
         try
         {
           Module module = dbRepository.GetModule(moduleConfig.Name, Settings.LanguageName);
@@ -112,7 +106,7 @@ namespace Faction.Build.Dotnet
       foreach (string file in files)
       {
         string contents = File.ReadAllText(file);
-        AgentTypeConfig agentTypeConfig = JsonConvert.DeserializeObject<AgentTypeConfig>(contents);
+        AgentTypeConfig agentTypeConfig = JsonSerializer.Deserialize<AgentTypeConfig>(contents);
         AgentType type = dbRepository.GetAgentType(agentTypeConfig.Name);
         
         if (type == null)
