@@ -28,7 +28,6 @@ namespace Faction.Build.Dotnet
 {  
   class Program
   {
-    public static string BuildType = "dotnet";
     public static void Main(string[] args)
     {
       FactionSettings factionSettings = Utility.GetConfiguration();
@@ -118,9 +117,8 @@ namespace Faction.Build.Dotnet
       services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
       // Add instances of our Message Event Handler to the DI pipeline
-      services.AddTransient<NewPayloadEventHandler>();
+      services.AddTransient<NewPayloadBuildEventHandler>();
       services.AddTransient<LoadModuleEventHandler>();
-      services.AddTransient<UpdatePayloadEventHandler>();
     }
     private static void ConfigureEventBus(IServiceCollection services)
     {
@@ -129,8 +127,7 @@ namespace Faction.Build.Dotnet
       // Map the Message Event Type to the proper Event Handler
       eventBus.Initialize();
       eventBus.Subscribe<LoadModule, LoadModuleEventHandler>();
-      eventBus.Subscribe<NewPayload, NewPayloadEventHandler>();
-      eventBus.Subscribe<UpdatePayload, UpdatePayloadEventHandler>();
+      eventBus.Subscribe<NewPayloadBuild, NewPayloadBuildEventHandler>();
     }
   }
 }
