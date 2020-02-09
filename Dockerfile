@@ -25,8 +25,9 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 RUN mkdir -p /Faction.Common/bin
 
 # create expected directories to use
-RUN mkdir -p /opt/faction/agents;
-RUN mkdir -p /opt/faction/modules;
+RUN mkdir -p /opt/faction/agents && \
+    mkdir -p /opt/faction/moduels && \
+    mkdir -p /opt/faction/agents/build
 
 RUN apt-get update && \
     apt-get install wget gpg apt-transport-https apt-utils dirmngr -y && \
@@ -56,7 +57,7 @@ RUN /opt/startup.sh restore $PUBLISH_ENABLED
 
 # copy and build everything else
 COPY . ./
-RUN rm -rf /app/{bin,obj}
+RUN rm -rf /app/bin && rm -rf /app/obj
 
 # mark wait-for-it executable
 RUN chmod 777 /app/Scripts/wait-for-it.sh

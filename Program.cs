@@ -113,6 +113,7 @@ namespace Faction.Build.Dotnet
       // Add instances of our Message Event Handler to the DI pipeline
       services.AddTransient<NewPayloadBuildEventHandler>();
       services.AddTransient<LoadModuleEventHandler>();
+
     }
     private static void ConfigureEventBus(IServiceCollection services)
     {
@@ -122,6 +123,7 @@ namespace Faction.Build.Dotnet
       eventBus.Initialize();
       eventBus.Subscribe<LoadModule, LoadModuleEventHandler>();
       eventBus.Subscribe<NewPayloadBuild, NewPayloadBuildEventHandler>();
+
     }
 
     public static void ConfirmDbReady(IServiceCollection services)
