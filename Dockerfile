@@ -24,11 +24,6 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 # allows for mounting the dll from the host, used for development
 RUN mkdir -p /Faction.Common/bin
 
-# create expected directories to use
-RUN mkdir -p /opt/faction/agents && \
-    mkdir -p /opt/faction/moduels && \
-    mkdir -p /opt/faction/agents/build
-
 RUN apt-get update && \
     apt-get install wget gpg apt-transport-https apt-utils dirmngr -y && \
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg && \
@@ -45,6 +40,11 @@ RUN apt-get update && \
 
 WORKDIR /app
 
+# create expected directories to use
+RUN mkdir -p /opt/faction/agents && \
+    mkdir -p /opt/faction/modules && \
+    mkdir -p /opt/faction/agents/build
+    
 # copy csproj and restore as distinct layers
 COPY ./Scripts/startup.sh /opt/startup.sh
 # Possibly add dotnet tool install dotnet-ef --version 3.0 --tool-path /usr/local/bin/?
